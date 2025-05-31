@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Venture Connect</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .dashboard-container {
+            padding: 6rem 5% 4rem;
+            background-color: #f9fafb;
+            min-height: 100vh;
+        }
+
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-header p {
+            color: #6b7280;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            color: #6b7280;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .change {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .stat-card .change.positive {
+            color: #059669;
+        }
+
+        .stat-card .change.negative {
+            color: #dc2626;
+        }
+
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-card h2 {
+            color: #1f2937;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .chart-placeholder {
+            width: 100%;
+            height: 300px;
+            background-color: #f3f4f6;
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+        }
+
+        .activity-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-card h2 {
+            color: #1f2937;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2563eb;
+            font-size: 1.25rem;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-content h4 {
+            color: #1f2937;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-content p {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            color: #9ca3af;
+            font-size: 0.75rem;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .profile-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            background-color: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-size: 2.5rem;
+            margin: 0 auto 1rem;
+        }
+
+        .profile-card h3 {
+            color: #1f2937;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-card p {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-stat {
+            text-align: center;
+        }
+
+        .profile-stat .value {
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-stat .label {
+            color: #6b7280;
+            font-size: 0.75rem;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .profile-actions button {
+            flex: 1;
+        }
+
+        .upcoming-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .upcoming-card h2 {
+            color: #1f2937;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .upcoming-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .upcoming-item {
+            display: flex;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .upcoming-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .upcoming-date {
+            width: 48px;
+            text-align: center;
+        }
+
+        .upcoming-date .day {
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 1.25rem;
+            line-height: 1;
+        }
+
+        .upcoming-date .month {
+            color: #6b7280;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .upcoming-content h4 {
+            color: #1f2937;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .upcoming-content p {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 5rem 1rem 2rem;
+            }
+
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="index.html">VentureConnect</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="startups.html"><i class="fas fa-building"></i> Startups</a>
+            <a href="investors.html"><i class="fas fa-users"></i> Investors</a>
+            <a href="feed.html"><i class="fas fa-newspaper"></i> Feed</a>
+            <a href="dashboard.html" class="active"><i class="fas fa-chart-line"></i> Dashboard</a>
+        </div>
+        <div class="nav-actions">
+            <button class="btn-primary"><i class="fas fa-plus"></i> Post Pitch</button>
+            <a href="login.html" class="btn-secondary">Login</a>
+            <a href="signup.html" class="btn-primary">Sign Up</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Dashboard</h1>
+            <p>Welcome back! Here's an overview of your activity and performance.</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="stat-card">
+                <h3>Profile Views</h3>
+                <div class="value">2,847</div>
+                <div class="change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>12.5% from last month</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <h3>Connections</h3>
+                <div class="value">156</div>
+                <div class="change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>8.2% from last month</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <h3>Engagement Rate</h3>
+                <div class="value">4.8%</div>
+                <div class="change negative">
+                    <i class="fas fa-arrow-down"></i>
+                    <span>2.1% from last month</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-content">
+            <div class="main-content">
+                <div class="chart-card">
+                    <h2>Profile Views Over Time</h2>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-line fa-3x"></i>
+                    </div>
+                </div>
+
+                <div class="activity-card">
+                    <h2>Recent Activity</h2>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h4>New Connection</h4>
+                                <p>Sarah Johnson connected with you</p>
+                                <span class="activity-time">2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-comment"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h4>New Comment</h4>
+                                <p>Michael Chen commented on your pitch</p>
+                                <span class="activity-time">5 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h4>New Like</h4>
+                                <p>Your post received 15 new likes</p>
+                                <span class="activity-time">1 day ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="profile-card">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3>John Doe</h3>
+                    <p>Startup Founder</p>
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <div class="value">156</div>
+                            <div class="label">Connections</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="value">48</div>
+                            <div class="label">Posts</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="value">2.8k</div>
+                            <div class="label">Views</div>
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="btn-secondary">Edit Profile</button>
+                        <button class="btn-primary">Share Profile</button>
+                    </div>
+                </div>
+
+                <div class="upcoming-card">
+                    <h2>Upcoming Events</h2>
+                    <div class="upcoming-list">
+                        <div class="upcoming-item">
+                            <div class="upcoming-date">
+                                <div class="day">15</div>
+                                <div class="month">Mar</div>
+                            </div>
+                            <div class="upcoming-content">
+                                <h4>Startup Networking Event</h4>
+                                <p>Tech Hub, San Francisco</p>
+                            </div>
+                        </div>
+                        <div class="upcoming-item">
+                            <div class="upcoming-date">
+                                <div class="day">22</div>
+                                <div class="month">Mar</div>
+                            </div>
+                            <div class="upcoming-content">
+                                <h4>Pitch Competition</h4>
+                                <p>Virtual Event</p>
+                            </div>
+                        </div>
+                        <div class="upcoming-item">
+                            <div class="upcoming-date">
+                                <div class="day">30</div>
+                                <div class="month">Mar</div>
+                            </div>
+                            <div class="upcoming-content">
+                                <h4>Investor Meetup</h4>
+                                <p>Downtown Conference Center</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About Us</h4>
+                <p>VentureConnect is a platform connecting innovative startups with potential investors.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect With Us</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 VentureConnect. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
